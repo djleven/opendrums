@@ -22,12 +22,22 @@
 
 CC     = g++
 LIBS   = sdl 
-CFLAGS = `pkg-config --cflags $(LIBS)`
+CFLAGS = `pkg-config --cflags $(LIBS)` -ansi -pedantic -Werror -Wall
 LFLAGS = `pkg-config --libs $(LIBS)` -lSDL_mixer -lGL -lGLU
 EXE    = out
+OBJS   = main.o display.o sound.o
 
-$(EXE): main.o
-	$(CC) $(LFLAGS) -o $(EXE) main.o
+$(EXE): $(OBJS)
+	$(CC) $(LFLAGS) -o $(EXE) $(OBJS)
 
-main.o: drums.cpp
+main.o: drums.cpp drums.cpp
 	$(CC) -c -o main.o drums.cpp $(CFLAGS)
+
+display.o: display.cpp display.h
+	$(CC) -c -o display.o display.cpp $(CFLAGS)
+
+sound.o: sound.cpp sound.h
+	$(CC) -c -o sound.o sound.cpp $(CFLAGS)
+
+clean:
+	rm -rf $(OBJS) $(EXE)
